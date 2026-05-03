@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopMini</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial;
+        }
+
+        body {
+            background: #f5f5f5;
+            user-select: none;
+        }
+
+        /* HEADER */
+        header {
+            height: 75px;
+            background: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 40px;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: #4a90e2;
+
+            font-size: 34px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 45px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #222;
+            font-size: 18px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #4a90e2;
+        }
+
+        nav .active {
+            color: #4a90e2;
+        }
+
+        nav .active::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            bottom: -25px;
+
+            width: 100%;
+            height: 3px;
+
+            background: #4a90e2;
+
+            border-radius: 10px;
+        }
+
+        .cart-nav {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .cart-nav:hover {
+            color: #4a90e2;
+            transform: translateY(-1px);
+        }
+
+        #cartCount {
+            position: absolute;
+            top: -10px;
+            right: -14px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4a90e2;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* SEARCH */
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 250px;
+            padding: 11px 40px 11px 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        /* LAYOUT */
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr 380px;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* SIDEBAR */
+        aside {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            height: fit-content;
+        }
+
+        aside h2 {
+            margin-bottom: 20px;
+        }
+
+        aside ul {
+            list-style: none;
+        }
+
+        aside li {
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            transition: 0.3s;
+        }
+
+        aside li:hover {
+            background: #edf4ff;
+            color: #4a90e2;
+        }
+
+        aside li.active {
+            background: #edf4ff;
+            color: #4a90e2;
+            font-weight: bold;
+        }
+
+        .filter-box {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .filter-box h3 {
+            margin-bottom: 15px;
+        }
+
+        .brand-list label {
+            display: block;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        /* RANGE */
+        .range-price {
+            margin-top: 15px;
+        }
+
+        .range-price input {
+            width: 100%;
+        }
+
+        .price-text {
+            margin-top: 10px;
+
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* PRODUCT */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+        .top-bar select {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            outline: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .card h4 {
+            margin: 10px 0;
+            font-size: 22px;
+        }
+
+        .price {
+            color: #e74c3c;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .stars {
+            margin-top: 8px;
+            color: #f1c40f;
+        }
+
+        .cart-btn {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid #4a90e2;
+            background: white;
+            color: #4a90e2;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .cart-btn:hover {
+            background: #4a90e2;
+            color: white;
+        }
+
+        /* DETAIL */
+        .detail {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            height: fit-content;
+        }
+
+        .detail img {
+            width: 100%;
+            height: 260px;
+            object-fit: contain;
+        }
+
+        .detail h2 {
+            margin: 15px 0;
+        }
+
+        .detail-price {
+            color: #e74c3c;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .desc {
+            margin-top: 15px;
+            max-height: 110px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .desc.expand {
+            max-height: 500px;
+        }
+
+        .desc ul {
+            padding-left: 20px;
+        }
+
+        .desc li {
+            margin-bottom: 8px;
+        }
+
+        #toggleDesc {
+            color: #4a90e2;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* QTY */
+        .qty-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .qty-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .qty-box button {
+            width: 35px;
+            height: 35px;
+            border: none;
+            background: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .qty-box span {
+            width: 40px;
+            text-align: center;
+        }
+
+        .add-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #4a90e2;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #357bd8;
+        }
+
+        /* CART */
+        .cart-box {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 999;
+        }
+
+        .cart-box.show {
+            display: block;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .cart-info {
+            flex: 1;
+        }
+
+        .cart-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .cart-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .cart-actions button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .remove-btn {
+            background: red;
+            color: white;
+        }
+
+        #totalPrice {
+            text-align: right;
+            margin-top: 20px;
+            color: #e74c3c;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <div class="logo">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>ShopMini</span>
+        </div>
+        <nav>
+            <a href="">Trang chủ</a>
+            <a href="" class="active">
+                Sản phẩm
+            </a>
+            <div class="cart-nav" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                Giỏ hàng
+                <span id="cartCount">0</span>
+            </div>
+
+            <a href="">Liên hệ</a>
+        </nav>
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Tìm sản phẩm...">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+
+    </header>
+
+    <!-- MAIN -->
+    <div class="container">
+
+        <!-- SIDEBAR -->
+        <aside>
+            <h2>Danh mục</h2>
+            <ul id="category">
+                <li class="active" data-cat="all">Tất cả</li>
+                <li data-cat="phone">Điện thoại</li>
+                <li data-cat="laptop">Laptop</li>
+                <li data-cat="accessory">Tai nghe</li>
+            </ul>
+
+            <div class="filter-box">
+                <h3>Khoảng giá</h3>
+                <div class="range-price">
+                    <input type="range" id="priceRange" min="0" max="50000000" value="50000000">
+                    <div class="price-text">
+                        <span>0đ</span>
+                        <span id="priceValue">
+                            50.000.000đ
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="filter-box">
+                <h3>Thương hiệu</h3>
+                <div class="brand-list" id="brandList">
+
+                    <label>
+                        <input type="checkbox" value="apple">
+                        Apple
+                    </label>
+
+                    <label>
+                        <input type="checkbox" value="samsung">
+                        Samsung
+                    </label>
+
+                    <label>
+                        <input type="checkbox" value="sony">
+                        Sony
+                    </label>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- PRODUCT -->
+        <div>
+
+            <div class="top-bar">
+                <h2>Tất cả sản phẩm</h2>
+                <select id="sort">
+                    <option value="">Sắp xếp</option>
+                    <option value="asc">Giá tăng dần</option>
+                    <option value="desc">Giá giảm dần</option>
+                </select>
+
+            </div>
+
+            <div class="grid" id="productList"></div>
+
+        </div>
+
+        <!-- DETAIL -->
+        <div>
+            <div class="detail">
+                <img id="dImg">
+                <h2 id="dName"></h2>
+                <div class="detail-price" id="dPrice"></div>
+                <div class="stars" id="dRating"></div>
+                <div id="dSold"></div>
+                <div id="dDesc" class="desc"></div>
+                <span id="toggleDesc">
+                    Xem thêm
+                </span>
+                <div class="qty-row">
+                    <span>Số lượng</span>
+                    <div class="qty-box">
+                        <button onclick="changeQty(-1)">
+                            -
+                        </button>
+                        <span id="qty">1</span>
+                        <button onclick="changeQty(1)">
+                            +
+                        </button>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addToCart()">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    Thêm vào giỏ hàng
+                </button>
+            </div>
+
+            <!-- CART -->
+            <div class="cart-box" id="cartBox">
+                <h3>🛒 Giỏ hàng</h3>
+                <div id="cartItems"></div>
+                <h3 id="totalPrice">
+                    Tổng: 0đ
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        Đã thêm vào giỏ
+    </div>
+
+    <script>
+
+        let products = [
+            {
+                id: 1, name: "iPhone 15", price: 22990000, cat: "phone", img: "https://cdn.tgdd.vn/Products/Images/42/281570/iphone-15-1-3-750x500.jpg",
+                desc: [
+                    "Màn hình OLED 6.1 inch Super Retina XDR sắc nét",
+                    "Chip A16 Bionic mạnh mẽ, xử lý mượt mọi tác vụ",
+                    "Camera chính 48MP chụp ảnh siêu chi tiết",
+                    "Dynamic Island hiển thị thông báo thông minh",
+                    "Cổng USB-C tiện lợi, sạc nhanh hơn",
+                    "Pin sử dụng cả ngày dài",
+                    "Thiết kế cao cấp, khung nhôm bền bỉ"
+                ],
+                rating: 4.5,
+                sold: 120,
+                brand: "apple",
+            },
+            {
+                id: 2, name: "MacBook Air M2", price: 28990000, cat: "laptop", img: "https://macone.vn/wp-content/uploads/2022/12/HAN00195-Lon-1024x682.jpeg",
+                desc: [
+                    "Màn hình OLED 6.1 inch, hiển thị sắc nét",
+                    "Camera chính 48MP, chụp đêm cực tốt",
+                    "Pin 5000mAh sử dụng cả ngày dài",
+                    "Chip A16 Bionic hiệu năng mạnh mẽ",
+                    "Thiết kế sang trọng, khung nhôm cao cấp"
+                ],
+                rating: 4.5,
+                sold: 120,
+                brand: "apple",
+            },
+            {
+                id: 3, name: "Sony XM5", price: 7990000, cat: "accessory", img: "http://vua2hand.com/upload/images/vua2hand%202022%20sony%201000xm5.jpg",
+                desc: [
+                    "Công nghệ chống ồn chủ động hàng đầu thế giới",
+                    "Âm thanh Hi-Res Audio chất lượng cao",
+                    "Thời lượng pin lên đến 30 giờ",
+                    "Thiết kế nhẹ, đeo thoải mái cả ngày",
+                    "Kết nối Bluetooth ổn định, hỗ trợ đa thiết bị",
+                    "Tích hợp micro đàm thoại rõ nét",
+                    "Điều khiển cảm ứng tiện lợi"
+                ],
+
+                rating: 4.5,
+                sold: 120,
+                brand: "sony",
+            },
+            {
+                id: 4, name: "Samsung S24", price: 18490000, cat: "phone", img: "https://minhtuanmobile.com/uploads/blog/galaxy-s24-ultra-tiep-tuc-lo-dien-hinh-anh-thuc-te-240108015129.jpg",
+                desc: [
+                    "Màn hình 6.2 inch Dynamic AMOLED 2X, 120Hz mượt mà",
+                    "Chip Snapdragon 8 Gen 3 hiệu năng mạnh mẽ",
+                    "Camera chính 50MP chụp ảnh sắc nét, quay video 8K",
+                    "Pin 4000mAh hỗ trợ sạc nhanh và sạc không dây",
+                    "Thiết kế cao cấp, khung Armor Aluminum bền bỉ",
+                    "Hỗ trợ Galaxy AI với nhiều tính năng thông minh",
+                    "Kháng nước, bụi chuẩn IP68"
+                ],
+
+                rating: 4.5,
+                sold: 120,
+                brand: "samsung",
+            }
+        ];
+
+        let cart =
+            JSON.parse(localStorage.getItem("cart"))
+            || [];
+
+        let currentProduct = null;
+
+        let quantity = 1;
+
+        /* RENDER PRODUCT */
+        function renderList(list = products) {
+
+            let html = "";
+
+            list.forEach(p => {
+
+                html += `
+                
+                <div class="card">
+
+                    <div onclick="showDetail(${p.id})">
+
+                        <img src="${p.img}">
+
+                        <h4>${p.name}</h4>
+
+                        <div class="price">
+                            ${p.price.toLocaleString()}đ
+                        </div>
+
+                        <div class="stars">
+                            ${renderStars(p.rating)}
+                        </div>
+
+                    </div>
+
+                    <button class="cart-btn"
+                    onclick="event.stopPropagation();
+                    quickAdd(${p.id})">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                    </button>
+
+                </div>
+                `;
+            });
+
+            document.getElementById("productList").innerHTML =
+                html;
+        }
+
+        /* DETAIL */
+        function showDetail(id) {
+
+            let p =
+                products.find(x => x.id === id);
+
+            currentProduct = p;
+
+            quantity = 1;
+
+            document.getElementById("dImg").src =
+                p.img;
+
+            document.getElementById("dName").innerText =
+                p.name;
+
+            document.getElementById("dPrice").innerText =
+                p.price.toLocaleString() + "đ";
+
+            document.getElementById("dDesc").innerHTML =
+                "<ul>" +
+                p.desc.map(i =>
+                    `<li>${i}</li>`).join("")
+                + "</ul>";
+
+            document.getElementById("dRating").innerHTML =
+                renderStars(p.rating);
+
+            document.getElementById("dSold").innerText =
+                "🔥 Đã bán: " + p.sold;
+
+            document.getElementById("qty").innerText =
+                quantity;
+        }
+
+        /* STAR */
+        function renderStars(rating = 5) {
+
+            let html = "";
+
+            let full =
+                Math.floor(rating);
+
+            let half =
+                rating % 1 >= 0.5;
+
+            for (let i = 0; i < full; i++) {
+                html +=
+                    '<i class="fa-solid fa-star"></i>';
+            }
+
+            if (half) {
+                html +=
+                    '<i class="fa-solid fa-star-half-stroke"></i>';
+            }
+
+            let empty =
+                5 - full - (half ? 1 : 0);
+
+            for (let i = 0; i < empty; i++) {
+
+                html +=
+                    '<i class="fa-regular fa-star"></i>';
+            }
+
+            return html;
+        }
+
+        /* QTY */
+        function changeQty(n) {
+
+            quantity += n;
+
+            if (quantity < 1)
+                quantity = 1;
+
+            document.getElementById("qty").innerText =
+                quantity;
+        }
+
+        /* ADD CART */
+        function addToCart() {
+
+            if (!currentProduct) return;
+
+            cart.push({
+                ...currentProduct,
+                qty: quantity
+            });
+
+            localStorage.setItem(
+                "cart",
+                JSON.stringify(cart)
+            );
+
+            renderCart();
+
+            updateCart();
+
+            showToast("Đã thêm vào giỏ");
+        }
+
+        /* QUICK ADD */
+        function quickAdd(id) {
+
+            let product =
+                products.find(p => p.id === id);
+
+            cart.push({
+                ...product,
+                qty: 1
+            });
+
+            localStorage.setItem(
+                "cart",
+                JSON.stringify(cart)
+            );
+
+            renderCart();
+
+            updateCart();
+
+            showToast("Đã thêm vào giỏ");
+        }
+
+        /* UPDATE CART */
+        function updateCart() {
+
+            let total =
+                cart.reduce((sum, item) =>
+                    sum + item.qty, 0);
+
+            document.getElementById("cartCount")
+                .innerText = total;
+        }
+
+        /* RENDER CART */
+        function renderCart() {
+
+            let html = "";
+
+            let total = 0;
+
+            cart.forEach((item, index) => {
+
+                total +=
+                    item.price * item.qty;
+
+                html += `
+                
+                <div class="cart-item">
+
+                    <img src="${item.img}">
+
+                    <div class="cart-info">
+
+                        <h4>${item.name}</h4>
+
+                        <p>
+                        ${item.price.toLocaleString()}đ
+                        </p>
+
+                        <div class="cart-actions">
+
+                            <button onclick=
+                            "changeCartQty(${index},-1)">
+                            -
+                            </button>
+
+                            <span>${item.qty}</span>
+
+                            <button onclick=
+                            "changeCartQty(${index},1)">
+                            +
+                            </button>
+
+                            <button class="remove-btn"
+                            onclick=
+                            "removeCart(${index})">
+                            x
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                `;
+            });
+
+            document.getElementById("cartItems")
+                .innerHTML = html;
+
+            document.getElementById("totalPrice")
+                .innerText =
+                "Tổng: "
+                + total.toLocaleString()
+                + "đ";
+        }
+
+        /* CHANGE CART QTY */
+        function changeCartQty(index, n) {
+
+            cart[index].qty += n;
+
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+
+            localStorage.setItem(
+                "cart",
+                JSON.stringify(cart)
+            );
+
+            renderCart();
+
+            updateCart();
+        }
+
+        /* REMOVE */
+        function removeCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem(
+                "cart",
+                JSON.stringify(cart)
+            );
+            renderCart();
+            updateCart();
+        }
+        function toggleCart() {
+            document.getElementById("cartBox")
+                .classList.toggle("show");
+        }
+
+        /* CATEGORY */
+        document.querySelectorAll("#category li")
+            .forEach(li => {
+
+                li.onclick = () => {
+
+                    document.querySelectorAll(
+                        "#category li")
+                        .forEach(i =>
+                            i.classList.remove(
+                                "active"));
+
+                    li.classList.add("active");
+
+                    let cat =
+                        li.dataset.cat;
+
+                    if (cat === "all")
+                        renderList();
+
+                    else {
+
+                        renderList(
+                            products.filter(p =>
+                                p.cat === cat
+                            )
+                        );
+                    }
+                }
+            });
+
+        /* SEARCH */
+        document.getElementById("search")
+            .oninput = (e) => {
+
+                let value =
+                    e.target.value.toLowerCase();
+
+                let filtered =
+                    products.filter(p =>
+                        p.name.toLowerCase()
+                            .includes(value)
+                    );
+
+                renderList(filtered);
+            };
+
+        /* SORT */
+        document.getElementById("sort")
+            .onchange = (e) => {
+
+                let val = e.target.value;
+
+                let sorted = [...products];
+
+                if (val === "asc") {
+
+                    sorted.sort((a, b) =>
+                        a.price - b.price);
+                }
+
+                if (val === "desc") {
+
+                    sorted.sort((a, b) =>
+                        b.price - a.price);
+                }
+
+                renderList(sorted);
+            };
+
+        /* PRICE */
+        document.getElementById("priceRange")
+            .oninput = (e) => {
+
+                let max =
+                    parseInt(e.target.value);
+
+                document.getElementById(
+                    "priceValue")
+                    .innerText =
+                    max.toLocaleString()
+                    + "đ";
+                let filtered =
+                    products.filter(p =>
+                        p.price <= max
+                    );
+                renderList(filtered);
+            };
+
+        /* BRAND */
+        document.querySelectorAll(
+            "#brandList input")
+            .forEach(cb => {
+                cb.onchange =
+                    filterProducts;
+            });
+
+        function filterProducts() {
+            let checkedBrands =
+                Array.from(
+                    document.querySelectorAll(
+                        "#brandList input:checked"
+                    )
+                ).map(cb => cb.value);
+            let filtered = products;
+            if (checkedBrands.length > 0) {
+
+                filtered =
+                    products.filter(p =>
+                        checkedBrands.includes(
+                            p.brand
+                        )
+                    );
+            }
+            renderList(filtered);
+        }
+
+        /* TOAST */
+        function showToast(msg) {
+
+            let toast =
+                document.getElementById(
+                    "toast");
+            toast.innerText = msg;
+            toast.classList.add("show");
+            setTimeout(() => {
+
+                toast.classList.remove(
+                    "show");
+            }, 2000);
+        }
+        /* DESC */
+        let expanded = false;
+        document.getElementById(
+            "toggleDesc")
+            .onclick = () => {
+
+                let desc =
+                    document.getElementById(
+                        "dDesc");
+                expanded = !expanded;
+                if (expanded) {
+                    desc.classList.add(
+                        "expand");
+                    document.getElementById(
+                        "toggleDesc")
+                        .innerText =
+                        "Thu gọn";
+                } else {
+                    desc.classList.remove(
+                        "expand");
+
+                    document.getElementById(
+                        "toggleDesc")
+                        .innerText =
+                        "Xem thêm";
+                }
+            }
+
+        /* INIT */
+        renderList();
+        renderCart();
+        updateCart();
+        showDetail(1);
+
+    </script>
+
+</body>
+
+</html>
