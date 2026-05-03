@@ -25,13 +25,10 @@
         header {
             height: 75px;
             background: white;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             padding: 0 40px;
-
             border-bottom: 1px solid #eee;
         }
 
@@ -39,9 +36,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-
             color: #4a90e2;
-
             font-size: 34px;
             font-weight: bold;
         }
@@ -70,17 +65,12 @@
 
         nav .active::after {
             content: "";
-
             position: absolute;
-
             left: 0;
             bottom: -25px;
-
             width: 100%;
             height: 3px;
-
             background: #4a90e2;
-
             border-radius: 10px;
         }
 
@@ -213,7 +203,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             margin-bottom: 20px;
         }
 
@@ -485,14 +474,12 @@
                 Giỏ hàng
                 <span id="cartCount">0</span>
             </div>
-
             <a href="">Liên hệ</a>
         </nav>
         <div class="search-box">
             <input type="text" id="search" placeholder="Tìm sản phẩm...">
             <i class="fa-solid fa-magnifying-glass"></i>
         </div>
-
     </header>
 
     <!-- MAIN -->
@@ -519,7 +506,6 @@
                         </span>
                     </div>
                 </div>
-
             </div>
 
             <div class="filter-box">
@@ -540,9 +526,7 @@
                         <input type="checkbox" value="sony">
                         Sony
                     </label>
-
                 </div>
-
             </div>
 
         </aside>
@@ -557,7 +541,6 @@
                     <option value="asc">Giá tăng dần</option>
                     <option value="desc">Giá giảm dần</option>
                 </select>
-
             </div>
 
             <div class="grid" id="productList"></div>
@@ -601,7 +584,6 @@
                 <h3 id="totalPrice">
                     Tổng: 0đ
                 </h3>
-
             </div>
 
         </div>
@@ -690,19 +672,14 @@
         function renderList(list = products) {
 
             let html = "";
-
             list.forEach(p => {
-
                 html += `
                 
                 <div class="card">
 
                     <div onclick="showDetail(${p.id})">
-
                         <img src="${p.img}">
-
                         <h4>${p.name}</h4>
-
                         <div class="price">
                             ${p.price.toLocaleString()}đ
                         </div>
@@ -712,13 +689,11 @@
                         </div>
 
                     </div>
-
                     <button class="cart-btn"
                     onclick="event.stopPropagation();
                     quickAdd(${p.id})">
 
                         <i class="fa-solid fa-cart-shopping"></i>
-
                     </button>
 
                 </div>
@@ -734,17 +709,12 @@
 
             let p =
                 products.find(x => x.id === id);
-
             currentProduct = p;
-
             quantity = 1;
-
             document.getElementById("dImg").src =
                 p.img;
-
             document.getElementById("dName").innerText =
                 p.name;
-
             document.getElementById("dPrice").innerText =
                 p.price.toLocaleString() + "đ";
 
@@ -756,10 +726,8 @@
 
             document.getElementById("dRating").innerHTML =
                 renderStars(p.rating);
-
             document.getElementById("dSold").innerText =
                 "🔥 Đã bán: " + p.sold;
-
             document.getElementById("qty").innerText =
                 quantity;
         }
@@ -768,13 +736,10 @@
         function renderStars(rating = 5) {
 
             let html = "";
-
             let full =
                 Math.floor(rating);
-
             let half =
                 rating % 1 >= 0.5;
-
             for (let i = 0; i < full; i++) {
                 html +=
                     '<i class="fa-solid fa-star"></i>';
@@ -787,7 +752,6 @@
 
             let empty =
                 5 - full - (half ? 1 : 0);
-
             for (let i = 0; i < empty; i++) {
 
                 html +=
@@ -801,19 +765,15 @@
         function changeQty(n) {
 
             quantity += n;
-
             if (quantity < 1)
                 quantity = 1;
-
             document.getElementById("qty").innerText =
                 quantity;
         }
 
         /* ADD CART */
         function addToCart() {
-
             if (!currentProduct) return;
-
             cart.push({
                 ...currentProduct,
                 qty: quantity
@@ -823,11 +783,8 @@
                 "cart",
                 JSON.stringify(cart)
             );
-
             renderCart();
-
             updateCart();
-
             showToast("Đã thêm vào giỏ");
         }
 
@@ -836,7 +793,6 @@
 
             let product =
                 products.find(p => p.id === id);
-
             cart.push({
                 ...product,
                 qty: 1
@@ -848,9 +804,7 @@
             );
 
             renderCart();
-
             updateCart();
-
             showToast("Đã thêm vào giỏ");
         }
 
@@ -869,9 +823,7 @@
         function renderCart() {
 
             let html = "";
-
             let total = 0;
-
             cart.forEach((item, index) => {
 
                 total +=
@@ -880,9 +832,7 @@
                 html += `
                 
                 <div class="cart-item">
-
                     <img src="${item.img}">
-
                     <div class="cart-info">
 
                         <h4>${item.name}</h4>
@@ -897,9 +847,7 @@
                             "changeCartQty(${index},-1)">
                             -
                             </button>
-
                             <span>${item.qty}</span>
-
                             <button onclick=
                             "changeCartQty(${index},1)">
                             +
@@ -944,7 +892,6 @@
             );
 
             renderCart();
-
             updateCart();
         }
 
@@ -974,12 +921,9 @@
                         .forEach(i =>
                             i.classList.remove(
                                 "active"));
-
                     li.classList.add("active");
-
                     let cat =
                         li.dataset.cat;
-
                     if (cat === "all")
                         renderList();
 
@@ -1013,11 +957,8 @@
         /* SORT */
         document.getElementById("sort")
             .onchange = (e) => {
-
                 let val = e.target.value;
-
                 let sorted = [...products];
-
                 if (val === "asc") {
 
                     sorted.sort((a, b) =>
@@ -1029,17 +970,14 @@
                     sorted.sort((a, b) =>
                         b.price - a.price);
                 }
-
                 renderList(sorted);
             };
 
         /* PRICE */
         document.getElementById("priceRange")
             .oninput = (e) => {
-
                 let max =
                     parseInt(e.target.value);
-
                 document.getElementById(
                     "priceValue")
                     .innerText =
@@ -1114,7 +1052,6 @@
                 } else {
                     desc.classList.remove(
                         "expand");
-
                     document.getElementById(
                         "toggleDesc")
                         .innerText =

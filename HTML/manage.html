@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Kanban Board</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            padding: 16px;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1450px;
+            margin: auto;
+        }
+
+        .navbar {
+            background: white;
+            border-radius: 18px;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            margin-left: 40px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            padding-bottom: 10px;
+        }
+
+        .menu .active {
+            color: #2563eb;
+            border-bottom: 3px solid #2563eb;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .search-box {
+            width: 260px;
+            padding: 10px 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            outline: none;
+            background: #f9fafb;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: #2563eb;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .toolbar {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .toolbar-left,
+        .toolbar-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .add-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .column {
+            border-radius: 18px;
+            padding: 16px;
+            min-height: 650px;
+            border: 1px solid #ececec;
+        }
+
+        .todo {
+            background: #fafafa;
+        }
+
+        .doing {
+            background: #f4f7ff;
+        }
+
+        .review {
+            background: #fff8f1;
+        }
+
+        .done {
+            background: #f4fff7;
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .column-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .column-title h2 {
+            font-size: 18px;
+        }
+
+        .count {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            font-weight: bold;
+            background: rgba(0,0,0,0.08);
+        }
+
+        .task {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+            border: 1px solid #ececec;
+            transition: 0.3s;
+        }
+
+        .task:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .task h3 {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .label {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .frontend {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .uiux {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .setup {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .task-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mini-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #d1d5db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .task-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .task-buttons button {
+            flex: 1;
+            border: none;
+            padding: 9px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .move-btn {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .add-task-column {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #2563eb;
+            font-weight: 600;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .add-task-column:hover {
+            background: rgba(37,99,235,0.08);
+        }
+
+        @media(max-width: 1200px) {
+            .board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .dark-mode {
+            background: #111827;
+            color: white;
+        }
+
+        .dark-mode .navbar,
+        .dark-mode .toolbar,
+        .dark-mode .task {
+            background: #1f2937;
+            color: white;
+            border-color: #374151;
+        }
+
+        .dark-mode .search-box {
+            background: #111827;
+            color: white;
+            border-color: #374151;
+        }
+
+        @media(max-width: 768px) {
+            .navbar,
+            .toolbar {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .board {
+                grid-template-columns: 1fr;
+            }
+
+            .menu {
+                gap: 16px;
+                margin-left: 20px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="navbar">
+
+            <div class="nav-left">
+                <div class="logo">
+                    ✅ TaskFlow
+                </div>
+
+                <div class="menu">
+                    <a href="#" class="active">Bảng công việc</a>
+                    <a href="#">Danh sách</a>
+                    <a href="#">Lịch</a>
+                    <a href="#">Thống kê</a>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <input type="text" placeholder="Tìm kiếm công việc..." class="search-box" id="searchInput">
+
+                🔔
+
+                <div class="avatar">
+                    N
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="toolbar">
+
+            <div class="toolbar-left">
+                <button class="add-btn" onclick="addTask()">
+                    + Thêm công việc
+                </button>
+
+                <button class="filter-btn">
+                    Tất cả dự án ▼
+                </button>
+            </div>
+
+            <div class="toolbar-right">
+                <button class="filter-btn" onclick="sortTasks()" id="sortBtn">
+                    Sắp xếp: Mới nhất ▼
+                </button>
+
+                <button class="filter-btn" onclick="toggleView()">
+                    ⬜
+                </button>
+
+                <button class="filter-btn" onclick="toggleDarkMode()">
+                    🌙
+                </button>
+            </div>
+
+        </div>
+
+
+        <div class="board">
+
+            <div class="column todo">
+                <div class="column-header">
+                    <div class="column-title">
+                        <h2>Chưa làm</h2>
+                        <span class="count" id="todoCount">0</span>
+                    </div>
+
+                    ⋮
+                </div>
+
+                <div id="todoTasks"></div>
+
+                <button class="add-task-column" onclick="addTask()">
+                    + Thêm công việc
+                </button>
+            </div>
+
+
+            <div class="column doing">
+                <div class="column-header">
+                    <div class="column-title">
+                        <h2>Đang làm</h2>
+                        <span class="count" id="doingCount">0</span>
+                    </div>
+
+                    ⋮
+                </div>
+
+                <div id="doingTasks"></div>
+
+                <button class="add-task-column" onclick="addTask()">
+                    + Thêm công việc
+                </button>
+            </div>
+
+
+            <div class="column review">
+                <div class="column-header">
+                    <div class="column-title">
+                        <h2>Đang kiểm tra</h2>
+                        <span class="count" id="reviewCount">0</span>
+                    </div>
+
+                    ⋮
+                </div>
+
+                <div id="reviewTasks"></div>
+
+                <button class="add-task-column" onclick="addTask()">
+                    + Thêm công việc
+                </button>
+            </div>
+
+
+            <div class="column done">
+                <div class="column-header">
+                    <div class="column-title">
+                        <h2>Hoàn thành</h2>
+                        <span class="count" id="doneCount">0</span>
+                    </div>
+
+                    ⋮
+                </div>
+
+                <div id="doneTasks"></div>
+
+                <button class="add-task-column" onclick="addTask()">
+                    + Thêm công việc
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [
+            {
+                id: 1,
+                title: "Thiết kế giao diện đăng nhập",
+                label: "UI/UX",
+                user: "Nguyễn An",
+                date: "20/05",
+                status: "todo"
+            },
+            {
+                id: 2,
+                title: "Tích hợp API đăng nhập",
+                label: "Frontend",
+                user: "Trần Nam",
+                date: "18/05",
+                status: "doing"
+            },
+            {
+                id: 3,
+                title: "Kiểm tra chức năng giỏ hàng",
+                label: "Frontend",
+                user: "Hoàng Linh",
+                date: "17/05",
+                status: "review"
+            },
+            {
+                id: 4,
+                title: "Cấu hình Tailwind CSS",
+                label: "Setup",
+                user: "Nguyễn An",
+                date: "10/05",
+                status: "done"
+            }
+        ];
+
+
+        function renderTasks() {
+
+            let search = document.getElementById("searchInput").value.toLowerCase();
+
+            document.getElementById("todoTasks").innerHTML = "";
+            document.getElementById("doingTasks").innerHTML = "";
+            document.getElementById("reviewTasks").innerHTML = "";
+            document.getElementById("doneTasks").innerHTML = "";
+
+
+            let todoCount = 0;
+            let doingCount = 0;
+            let reviewCount = 0;
+            let doneCount = 0;
+
+
+            tasks.forEach(task => {
+
+                if (!task.title.toLowerCase().includes(search)) {
+                    return;
+                }
+
+                let labelClass = "frontend";
+
+                if (task.label === "UI/UX") {
+                    labelClass = "uiux";
+                }
+
+                if (task.label === "Setup") {
+                    labelClass = "setup";
+                }
+
+                if (task.label === "Frontend") {
+                    labelClass = "frontend";
+                }
+
+
+                let taskHTML = `
+                    <div class="task">
+
+                        <h3>${task.title}</h3>
+
+                        <span class="label ${labelClass}">
+                            ${task.label}
+                        </span>
+
+                        <div class="task-footer">
+
+                            <div class="task-user">
+                                <div class="mini-avatar">
+                                    ${task.user.charAt(0)}
+                                </div>
+
+                                <span>${task.user}</span>
+                            </div>
+
+                            <span>${task.date}</span>
+
+                        </div>
+
+                        <div class="task-buttons">
+
+                            <button class="move-btn" onclick="moveTask(${task.id})">
+                                Chuyển
+                            </button>
+
+                            <button class="move-btn" onclick="editTask(${task.id})">
+                                Sửa
+                            </button>
+
+                            <button class="delete-btn" onclick="deleteTask(${task.id})">
+                                Xóa
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+
+                if (task.status === "todo") {
+                    document.getElementById("todoTasks").innerHTML += taskHTML;
+                    todoCount++;
+                }
+
+                else if (task.status === "doing") {
+                    document.getElementById("doingTasks").innerHTML += taskHTML;
+                    doingCount++;
+                }
+
+                else if (task.status === "review") {
+                    document.getElementById("reviewTasks").innerHTML += taskHTML;
+                    reviewCount++;
+                }
+
+                else if (task.status === "done") {
+                    document.getElementById("doneTasks").innerHTML += taskHTML;
+                    doneCount++;
+                }
+            });
+
+
+            document.getElementById("todoCount").innerText = todoCount;
+            document.getElementById("doingCount").innerText = doingCount;
+            document.getElementById("reviewCount").innerText = reviewCount;
+            document.getElementById("doneCount").innerText = doneCount;
+
+
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+
+        function addTask() {
+
+            let title = prompt("Nhập tên công việc:");
+
+            if (!title || title.trim() === "") {
+                return;
+            }
+
+            let user = prompt("Tên người thực hiện:") || "Bạn";
+
+            let label = prompt("Label công việc:") || "Frontend";
+
+            let newTask = {
+                id: Date.now(),
+                title: title,
+                label: label,
+                user: user,
+                date: new Date().toLocaleDateString("vi-VN"),
+                status: "todo"
+            };
+
+            tasks.push(newTask);
+
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+
+            console.log(tasks);
+
+            renderTasks();
+        }
+
+
+        function editTask(id) {
+
+            let task = tasks.find(task => task.id === id);
+
+            let newTitle = prompt("Sửa tên công việc:", task.title);
+
+            if (!newTitle) {
+                return;
+            }
+
+            task.title = newTitle;
+
+            renderTasks();
+        }
+
+
+        let newestFirst = true;
+
+        function sortTasks() {
+
+            newestFirst = !newestFirst;
+
+            if (newestFirst) {
+                tasks.sort((a, b) => b.id - a.id);
+                document.getElementById("sortBtn").innerText = "Sắp xếp: Mới nhất ▼";
+            }
+
+            else {
+                tasks.sort((a, b) => a.id - b.id);
+                document.getElementById("sortBtn").innerText = "Sắp xếp: Cũ nhất ▼";
+            }
+
+            renderTasks();
+        }
+
+
+        function toggleView() {
+            alert("Đã chuyển chế độ hiển thị");
+        }
+
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+
+        function deleteTask(id) {
+
+            let confirmDelete = confirm("Bạn có chắc muốn xóa?");
+
+            if (!confirmDelete) {
+                return;
+            }
+
+            tasks = tasks.filter(task => task.id !== id);
+
+            renderTasks();
+        }
+
+
+        function moveTask(id) {
+
+            tasks.forEach(task => {
+
+                if (task.id === id) {
+
+                    if (task.status === "todo") {
+                        task.status = "doing";
+                    }
+
+                    else if (task.status === "doing") {
+                        task.status = "review";
+                    }
+
+                    else if (task.status === "review") {
+                        task.status = "done";
+                    }
+
+                    else {
+                        task.status = "todo";
+                    }
+                }
+            });
+
+            renderTasks();
+        }
+
+
+        document.getElementById("searchInput").addEventListener("input", renderTasks);
+
+
+        renderTasks();
+
+    </script>
+
+</body>
+</html>
