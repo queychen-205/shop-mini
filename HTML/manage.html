@@ -344,10 +344,37 @@
 
         .label {
             font-size: 12px;
-            padding: 3px 8px;
+            padding: 4px 8px;
             border-radius: 6px;
             display: inline-block;
             margin: 6px 0;
+            font-weight: 500;
+        }
+
+        /* màu từng loại */
+        .frontend {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .uiux {
+            background: #e9d5ff;
+            color: #6b21a8;
+        }
+
+        .backend {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .bug {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .research {
+            background: #dcfce7;
+            color: #166534;
         }
 
         .frontend {
@@ -406,29 +433,122 @@
         }
 
         /* MODAL */
+        /* ===== NỀN ===== */
         .modal {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            display: none;
-            align-items: center;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            display: flex;
             justify-content: center;
+            align-items: center;
         }
 
-        .modal-content {
+        /* ===== BOX ===== */
+        .modal-box {
+            width: 360px;
             background: #fff;
+            border-radius: 16px;
             padding: 20px;
-            border-radius: 10px;
-            width: 300px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.25s ease;
         }
 
-        .modal input {
+        /* ANIMATION */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* TITLE */
+        .modal-box h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* INPUT */
+        .modal-box input,
+        .modal-box select {
             width: 100%;
-            padding: 8px;
-            margin: 5px 0;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            outline: none;
+            transition: 0.2s;
+        }
+        .modal-box select {
+            cursor: pointer;
+        }
+
+        .modal-box select {
+            appearance: none;
+            /* ẩn mũi tên mặc định */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+
+            padding-right: 35px;
+            /* tạo khoảng trống */
+            background: url("data:image/svg+xml;utf8,<svg fill='%236b7280' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5'/></svg>") no-repeat right 10px center;
+        }
+
+        .modal-box input:focus,
+        .modal-box select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        /* BUTTON AREA */
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* CANCEL */
+        .cancel {
+            background: #f3f4f6;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* SAVE */
+        .save {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .save:hover {
+            background: #1d4ed8;
+        }
+
+        /* ===== CLOSE (optional) ===== */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #6b7280;
+        }
+
+        .close:hover {
+            color: #000;
         }
 
         /* EDIT */
@@ -560,11 +680,26 @@
 
     <!-- MODAL -->
     <div class="modal" id="modal">
-        <div class="modal-content">
+        <div class="modal-box">
+
             <h3>Thêm công việc</h3>
-            <input id="title" placeholder="Tên">
-            <input id="user" placeholder="Người làm">
-            <button class="btn" onclick="addTask()">Thêm</button>
+
+            <input id="title" placeholder="Tên công việc">
+            <input id="user" placeholder="Người thực hiện">
+
+            <select id="label">
+                <option value="frontend">Frontend</option>
+                <option value="uiux">UI/UX</option>
+                <option value="backend">Backend</option>
+                <option value="bug">Bug</option>
+                <option value="research">Research</option>
+            </select>
+
+            <div class="modal-actions">
+                <button class="cancel" onclick="closeModal()">Huỷ</button>
+                <button class="save" onclick="addTask()">Thêm</button>
+            </div>
+
         </div>
     </div>
 
@@ -687,9 +822,13 @@
             }
         });
 
-        function del(id) {
-            tasks = tasks.filter(t => t.id != id);
-            save(); render();
+        function delTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            save();
+            render();
+        }
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
         }
 
         function edit(id) {
