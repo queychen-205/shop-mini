@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Task Detail</title>
+
+    <!-- ICON -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            padding: 30px;
+            color: #1e293b;
+            transition: 0.3s;
+        }
+
+        .container {
+            max-width: 1450px;
+            margin: auto;
+        }
+
+        /* TOP */
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .back {
+            font-size: 16px;
+            cursor: pointer;
+            color: #475569;
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 13px 22px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .edit:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .delete {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .dark-btn {
+            background: #111827;
+            color: white;
+        }
+
+        /* MAIN */
+        .main {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 22px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .blue {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .red {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-size: 42px;
+            cursor: pointer;
+        }
+
+        .desc {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 27px;
+            margin-bottom: 20px;
+        }
+
+        /* CHECKLIST */
+        .checklist li {
+            list-style: none;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 12px;
+            transition: 0.3s;
+            cursor: grab;
+        }
+
+        .checklist li:hover {
+            background: #f8fbff;
+            transform: translateX(5px);
+        }
+
+        .checklist input {
+            width: 20px;
+            height: 20px;
+            accent-color: #2563eb;
+            cursor: grab;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+
+        /* FILE */
+        .file {
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .file:hover {
+            background: #f8fbff;
+            transform: scale(1.02);
+        }
+
+        /* COMMENT */
+        .comment-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .comment-input input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid #dbe2ea;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .send {
+            width: 55px;
+            border: none;
+            border-radius: 14px;
+            background: #2563eb;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .send:hover {
+            background: #1d4ed8;
+        }
+
+        .comment {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .a1 {
+            background: #2563eb;
+        }
+
+        .a2 {
+            background: #16a34a;
+        }
+
+        .a3 {
+            background: #f59e0b;
+        }
+
+        .comment-body {
+            flex: 1;
+        }
+
+        .comment-body h4 {
+            margin-bottom: 6px;
+        }
+
+        .comment-body p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* SIDEBAR */
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .label-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .label {
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .lb1 {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .lb2 {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .lb3 {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        /* ACTIVITY */
+        .activity {
+            border-left: 3px solid #2563eb;
+            padding-left: 15px;
+            margin-bottom: 25px;
+        }
+
+        .activity p {
+            margin-top: 5px;
+            color: #64748b;
+        }
+
+        /* NOTIFICATION */
+        .notify {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2563eb;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: show 0.4s;
+        }
+
+        @keyframes show {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* DARK MODE */
+        body.dark {
+            background: #0f172a;
+            color: white;
+        }
+
+        body.dark .card {
+            background: #1e293b;
+            color: white;
+        }
+
+        body.dark .desc,
+        body.dark .comment-body p,
+        body.dark .activity p {
+            color: #cbd5e1;
+        }
+
+        body.dark .comment-input input {
+            background: #0f172a;
+            color: white;
+            border: 1px solid #334155;
+        }
+
+        body.dark .file {
+            border-color: #334155;
+        }
+
+        body.dark .file:hover,
+        body.dark .checklist li:hover {
+            background: #334155;
+        }
+
+        @media(max-width:1000px) {
+
+            .main,
+            .bottom {
+                grid-template-columns: 1fr;
+            }
+
+            .top {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- TOP -->
+        <div class="top">
+
+            <div class="back">
+                <i class="fa-solid fa-arrow-left"></i>
+                Quay lại bảng công việc
+            </div>
+
+            <div class="top-buttons">
+
+                <button class="btn edit">
+                    <i class="fa-solid fa-pen"></i>
+                    Chỉnh sửa
+                </button>
+
+                <button class="btn delete">
+                    <i class="fa-solid fa-trash"></i>
+                    Xóa công việc
+                </button>
+
+                <button class="btn dark-btn" id="darkModeBtn">
+
+                    <i class="fa-solid fa-moon"></i>
+                    Dark Mode
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- MAIN -->
+        <div class="main">
+
+            <!-- LEFT -->
+            <div>
+
+                <!-- TASK -->
+                <div class="card">
+
+                    <span class="status blue" id="taskStatus">
+
+                        Đang làm
+
+                    </span>
+
+                    <span class="status red">
+                        Ưu tiên: Cao
+                    </span>
+
+                    <h1 id="taskTitle">
+                        Tích hợp API đăng nhập
+                    </h1>
+
+                    <p class="desc">
+                        Tích hợp API đăng nhập từ backend,
+                        xử lý thành công, thất bại
+                        và lưu token vào LocalStorage.
+                    </p>
+
+                    <!-- CHECKLIST -->
+                    <h2 class="title">Checklist</h2>
+
+                    <ul class="checklist" id="checklist">
+
+                        <li draggable="true">
+
+                            <input type="checkbox" checked>
+
+                            <span class="done">
+                                Tạo API endpoint đăng nhập
+                            </span>
+
+                        </li>
+
+                        <li draggable="true">
+
+                            <input type="checkbox" checked>
+
+                            <span class="done">
+                                Gửi request đăng nhập
+                            </span>
+
+                        </li>
+
+                        <li draggable="true">
+
+                            <input type="checkbox">
+
+                            <span>
+                                Xử lý response thành công
+                            </span>
+
+                        </li>
+
+                        <li draggable="true">
+
+                            <input type="checkbox">
+
+                            <span>
+                                Xử lý lỗi và hiển thị thông báo
+                            </span>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <!-- FILE -->
+                <div class="card">
+
+                    <h2 class="title">
+                        Đính kèm
+                    </h2>
+
+                    <div class="file">
+
+                        <div>
+                            <i class="fa-solid fa-file-pdf"></i>
+                            login-api-docs.pdf
+                        </div>
+
+                        <i class="fa-solid fa-download"></i>
+
+                    </div>
+
+                    <div class="file">
+
+                        <div>
+                            <i class="fa-solid fa-image"></i>
+                            login-flow.png
+                        </div>
+
+                        <i class="fa-solid fa-download"></i>
+
+                    </div>
+
+                </div>
+
+                <!-- COMMENT -->
+                <div class="card">
+
+                    <h2 class="title">
+                        Bình luận
+                    </h2>
+
+                    <div class="comment-input">
+
+                        <input type="text" id="commentText" placeholder="Viết bình luận...">
+
+                        <button class="send" onclick="addComment()">
+
+                            <i class="fa-solid fa-paper-plane"></i>
+
+                        </button>
+
+                    </div>
+
+                    <div id="commentList">
+
+                        <div class="comment">
+
+                            <div class="avatar a1">
+                                T
+                            </div>
+
+                            <div class="comment-body">
+
+                                <h4>Trần Nam</h4>
+
+                                <p>
+                                    API đã sẵn sàng ở môi trường dev.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div>
+
+                <!-- INFO -->
+                <div class="card">
+
+                    <h2 class="title">
+                        Thông tin công việc
+                    </h2>
+
+                    <div class="info">
+                        <span>Trạng thái</span>
+                        <span>Đang làm</span>
+                    </div>
+
+                    <div class="info">
+                        <span>Danh mục</span>
+                        <span>Frontend</span>
+                    </div>
+
+                    <div class="info">
+                        <span>Người giao</span>
+                        <span>Nguyễn An</span>
+                    </div>
+
+                    <div class="info">
+                        <span>Người thực hiện</span>
+                        <span>Trần Nam</span>
+                    </div>
+
+                </div>
+
+                <!-- LABEL -->
+                <div class="card">
+
+                    <h2 class="title">
+                        Nhãn (Labels)
+                    </h2>
+
+                    <div class="label-box">
+
+                        <div class="label lb1">
+                            API
+                        </div>
+
+                        <div class="label lb2">
+                            Auth
+                        </div>
+
+                        <div class="label lb3">
+                            Login
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ACTIVITY -->
+                <div class="card">
+
+                    <h2 class="title">
+                        Hoạt động
+                    </h2>
+
+                    <div class="activity">
+
+                        <strong>
+                            Trạng thái chuyển từ
+                        </strong>
+
+                        <p>
+                            Chưa làm → Đang làm
+                        </p>
+
+                    </div>
+
+                    <div class="activity">
+
+                        <strong>
+                            Thêm checklist
+                        </strong>
+
+                        <p>
+                            20/05/2024 10:20
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        // ======================
+        // CHECKLIST
+        // ======================
+
+        let checkboxes =
+            document.querySelectorAll(".checklist input");
+
+        checkboxes.forEach(box => {
+
+            box.addEventListener("change", function () {
+
+                let text =
+                    this.nextElementSibling;
+
+                if (this.checked) {
+
+                    text.classList.add("done");
+
+                } else {
+
+                    text.classList.remove("done");
+
+                }
+
+            });
+
+        });
+
+        // ======================
+        // ADD COMMENT
+        // ======================
+
+        function addComment() {
+
+            let input =
+                document.getElementById("commentText");
+
+            let text =
+                input.value.trim();
+
+            if (text === "") {
+
+                alert("Vui lòng nhập bình luận");
+                return;
+
+            }
+
+            let commentList =
+                document.getElementById("commentList");
+
+            let div =
+                document.createElement("div");
+
+            div.classList.add("comment");
+
+            div.innerHTML = `
+
+                <div class="avatar a2">
+                    B
+                </div>
+
+                <div class="comment-body">
+
+                    <h4>Bạn</h4>
+
+                    <p>${text}</p>
+
+                </div>
+
+            `;
+
+            commentList.prepend(div);
+
+            input.value = "";
+
+            showNotification(
+                "Có bình luận mới!"
+            );
+
+        }
+
+        // ======================
+        // NOTIFICATION
+        // ======================
+
+        function showNotification(text) {
+
+            let notify =
+                document.createElement("div");
+
+            notify.classList.add("notify");
+
+            notify.innerText = text;
+
+            document.body.appendChild(notify);
+
+            setTimeout(() => {
+
+                notify.remove();
+
+            }, 3000);
+
+        }
+
+        // ======================
+        // DELETE
+        // ======================
+
+        let deleteBtn =
+            document.querySelector(".delete");
+
+        deleteBtn.addEventListener("click", function () {
+
+            let check =
+                confirm("Bạn có chắc muốn xóa?");
+
+            if (check) {
+
+                showNotification(
+                    "Đã xóa công việc"
+                );
+
+            }
+
+        });
+
+        // ======================
+        // EDIT TITLE
+        // ======================
+
+        let title =
+            document.getElementById("taskTitle");
+
+        title.addEventListener("click", function () {
+
+            let newTitle =
+                prompt(
+                    "Nhập tiêu đề mới",
+                    title.innerText
+                );
+
+            if (
+                newTitle !== null &&
+                newTitle.trim() !== ""
+            ) {
+
+                title.innerText = newTitle;
+
+            }
+
+        });
+
+        // ======================
+        // DARK MODE
+        // ======================
+
+        let darkBtn =
+            document.getElementById("darkModeBtn");
+
+        darkBtn.addEventListener("click", function () {
+
+            document.body.classList.toggle("dark");
+
+        });
+
+        // ======================
+        // FILE DOWNLOAD
+        // ======================
+
+        let files =
+            document.querySelectorAll(".file");
+
+        files.forEach(file => {
+
+            file.addEventListener("click", function () {
+
+                showNotification(
+                    "Đang tải file..."
+                );
+
+            });
+
+        });
+
+        // ======================
+        // STATUS
+        // ======================
+
+        let status =
+            document.getElementById("taskStatus");
+
+        status.addEventListener("click", function () {
+
+            if (
+                status.innerText === "Đang làm"
+            ) {
+
+                status.innerText = "Hoàn thành";
+
+                status.style.background =
+                    "#dcfce7";
+
+                status.style.color =
+                    "#16a34a";
+
+            } else {
+
+                status.innerText = "Đang làm";
+
+                status.style.background =
+                    "#dbeafe";
+
+                status.style.color =
+                    "#2563eb";
+
+            }
+
+        });
+
+        // ======================
+        // DRAG DROP
+        // ======================
+
+        const checklist =
+            document.getElementById("checklist");
+
+        let draggedItem = null;
+
+        document.querySelectorAll("#checklist li")
+            .forEach(item => {
+
+                item.addEventListener(
+                    "dragstart",
+                    function () {
+
+                        draggedItem = item;
+
+                    }
+                );
+
+                item.addEventListener(
+                    "dragover",
+                    function (e) {
+
+                        e.preventDefault();
+
+                    }
+                );
+
+                item.addEventListener(
+                    "drop",
+                    function () {
+
+                        checklist.insertBefore(
+                            draggedItem,
+                            item
+                        );
+
+                    }
+                );
+
+            });
+
+    </script>
+
+</body>
+
+</html>
