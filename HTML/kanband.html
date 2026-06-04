@@ -133,8 +133,26 @@
         }
 
         .title {
-            font-size: 27px;
+            font-size: 28px;
             margin-bottom: 20px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #checkCount {
+            background: linear-gradient(135deg,
+                    #3b82f6,
+                    #8b5cf6);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow:
+                0 4px 12px rgba(59, 130, 246, 0.35);
+            transition: 0.3s;
         }
 
         /* CHECKLIST */
@@ -255,8 +273,9 @@
         }
 
         .comment-body p {
+            margin-top: 5px;
             color: #64748b;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         /* SIDEBAR */
@@ -266,6 +285,55 @@
             margin-bottom: 22px;
             padding-bottom: 12px;
             border-bottom: 1px solid #f1f5f9;
+        }
+
+        .info-card {
+            padding: 28px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #e2e8f0;
+            transition: 0.3s;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-row:hover {
+            transform: translateX(5px);
+        }
+
+        .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .left i {
+            width: 20px;
+            color: #2563eb;
+            font-size: 15px;
+        }
+
+        .info-value {
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .deadline {
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
         }
 
         .label-box {
@@ -392,7 +460,6 @@
                 <i class="fa-solid fa-arrow-left"></i>
                 Quay lại bảng công việc
             </div>
-
             <div class="top-buttons">
 
                 <button class="btn edit">
@@ -409,7 +476,6 @@
 
                     <i class="fa-solid fa-moon"></i>
                     Dark Mode
-
                 </button>
 
             </div>
@@ -417,18 +483,16 @@
         </div>
 
         <!-- MAIN -->
-        <div class="main">
+        <div class="main" id="taskMain">
 
             <!-- LEFT -->
             <div>
 
                 <!-- TASK -->
-                <div class="card">
+                <div class="card" id="taskCard">
 
                     <span class="status blue" id="taskStatus">
-
                         Đang làm
-
                     </span>
 
                     <span class="status red">
@@ -446,34 +510,29 @@
                     </p>
 
                     <!-- CHECKLIST -->
-                    <h2 class="title">Checklist</h2>
-
+                    <h2 class="title">
+                        Checklist
+                        <span id="checkCount">(2/4)</span>
+                    </h2>
                     <ul class="checklist" id="checklist">
 
                         <li draggable="true">
 
                             <input type="checkbox" checked>
-
                             <span class="done">
                                 Tạo API endpoint đăng nhập
                             </span>
-
                         </li>
 
                         <li draggable="true">
-
                             <input type="checkbox" checked>
-
                             <span class="done">
                                 Gửi request đăng nhập
                             </span>
-
                         </li>
 
                         <li draggable="true">
-
                             <input type="checkbox">
-
                             <span>
                                 Xử lý response thành công
                             </span>
@@ -481,17 +540,12 @@
                         </li>
 
                         <li draggable="true">
-
                             <input type="checkbox">
-
                             <span>
                                 Xử lý lỗi và hiển thị thông báo
                             </span>
-
                         </li>
-
                     </ul>
-
                 </div>
 
                 <!-- FILE -->
@@ -500,16 +554,13 @@
                     <h2 class="title">
                         Đính kèm
                     </h2>
-
                     <div class="file">
 
                         <div>
                             <i class="fa-solid fa-file-pdf"></i>
                             login-api-docs.pdf
                         </div>
-
                         <i class="fa-solid fa-download"></i>
-
                     </div>
 
                     <div class="file">
@@ -518,11 +569,8 @@
                             <i class="fa-solid fa-image"></i>
                             login-flow.png
                         </div>
-
                         <i class="fa-solid fa-download"></i>
-
                     </div>
-
                 </div>
 
                 <!-- COMMENT -->
@@ -533,92 +581,122 @@
                     </h2>
 
                     <div class="comment-input">
-
                         <input type="text" id="commentText" placeholder="Viết bình luận...">
-
                         <button class="send" onclick="addComment()">
-
                             <i class="fa-solid fa-paper-plane"></i>
-
                         </button>
 
                     </div>
-
                     <div id="commentList">
-
                         <div class="comment">
 
                             <div class="avatar a1">
                                 T
                             </div>
-
                             <div class="comment-body">
-
                                 <h4>Trần Nam</h4>
-
                                 <p>
                                     API đã sẵn sàng ở môi trường dev.
                                 </p>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
             <!-- RIGHT -->
             <div>
 
                 <!-- INFO -->
-                <div class="card">
+                <div class="card info-card" id="taskCard">
 
                     <h2 class="title">
                         Thông tin công việc
                     </h2>
 
-                    <div class="info">
-                        <span>Trạng thái</span>
-                        <span>Đang làm</span>
+                    <div class="info-row">
+
+                        <div class="left">
+                            <i class="fa-solid fa-layer-group"></i>
+                            Trạng thái
+                        </div>
+
+                        <span class="status blue">
+                            Đang làm
+                        </span>
                     </div>
 
-                    <div class="info">
-                        <span>Danh mục</span>
-                        <span>Frontend</span>
+                    <div class="info-row">
+
+                        <div class="left">
+                            <i class="fa-solid fa-folder"></i>
+                            Danh mục
+                        </div>
+                        <span class="info-value">
+                            Frontend
+                        </span>
                     </div>
 
-                    <div class="info">
-                        <span>Người giao</span>
-                        <span>Nguyễn An</span>
+                    <div class="info-row">
+
+                        <div class="left">
+                            <i class="fa-solid fa-user"></i>
+                            Người giao
+                        </div>
+
+                        <span class="info-value">
+                            Nguyễn An
+                        </span>
                     </div>
 
-                    <div class="info">
-                        <span>Người thực hiện</span>
-                        <span>Trần Nam</span>
+                    <div class="info-row">
+
+                        <div class="left">
+                            <i class="fa-solid fa-user-check"></i>
+                            Người thực hiện
+                        </div>
+
+                        <span class="info-value">
+                            Trần Nam
+                        </span>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="left">
+                            <i class="fa-solid fa-calendar"></i>
+                            Ngày tạo
+                        </div>
+                        <span class="info-value">
+                            20/05/2024
+                        </span>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="left">
+                            <i class="fa-solid fa-clock"></i>
+                            Deadline
+                        </div>
+
+                        <span class="deadline">
+                            25/05/2024
+                        </span>
                     </div>
 
                 </div>
 
                 <!-- LABEL -->
                 <div class="card">
-
                     <h2 class="title">
                         Nhãn (Labels)
                     </h2>
-
                     <div class="label-box">
 
                         <div class="label lb1">
                             API
                         </div>
-
                         <div class="label lb2">
                             Auth
                         </div>
-
                         <div class="label lb3">
                             Login
                         </div>
@@ -629,221 +707,270 @@
 
                 <!-- ACTIVITY -->
                 <div class="card">
-
                     <h2 class="title">
                         Hoạt động
                     </h2>
 
                     <div class="activity">
-
                         <strong>
                             Trạng thái chuyển từ
                         </strong>
-
                         <p>
                             Chưa làm → Đang làm
                         </p>
-
                     </div>
 
                     <div class="activity">
-
                         <strong>
                             Thêm checklist
                         </strong>
-
                         <p>
                             20/05/2024 10:20
                         </p>
-
                     </div>
-
                 </div>
-
             </div>
 
         </div>
-
     </div>
-
     <script>
-
         // ======================
         // CHECKLIST
         // ======================
 
+        // lấy tất cả checkbox trong checklist
         let checkboxes =
             document.querySelectorAll(".checklist input");
 
+        // lấy chỗ hiển thị số (2/4)
+        let checkCount =
+            document.getElementById("checkCount");
+
+
+        // hàm cập nhật checklist
+        function updateChecklist() {
+
+            // đếm tổng checkbox
+            let total =
+                checkboxes.length;
+
+            // biến đếm số checkbox đã tick
+            let checked =
+                0;
+
+            // lặp từng checkbox
+            checkboxes.forEach(box => {
+
+                // nếu checkbox được tick
+                if (box.checked) {
+
+                    // tăng checked lên 1
+                    checked++;
+                }
+            });
+
+            // đổi text thành (2/4)
+            checkCount.innerText =
+                `(${checked}/${total})`;
+        }
+
+
+        // lặp từng checkbox
         checkboxes.forEach(box => {
 
+            // lắng nghe sự kiện tick checkbox
             box.addEventListener("change", function () {
 
+                // lấy span kế bên checkbox
                 let text =
                     this.nextElementSibling;
 
+                // nếu checkbox đã tick
                 if (this.checked) {
 
+                    // thêm class done
                     text.classList.add("done");
 
                 } else {
 
+                    // bỏ class done
                     text.classList.remove("done");
-
                 }
 
+                // cập nhật lại số checklist
+                updateChecklist();
             });
 
         });
+
+        // chạy lần đầu
+        updateChecklist();
+
 
         // ======================
         // ADD COMMENT
         // ======================
 
+        // hàm thêm comment
         function addComment() {
 
+            // lấy ô input comment
             let input =
                 document.getElementById("commentText");
 
+            // lấy text người dùng nhập
+            // trim() xóa khoảng trắng đầu cuối
             let text =
                 input.value.trim();
 
+            // nếu input rỗng
             if (text === "") {
 
+                // hiện cảnh báo
                 alert("Vui lòng nhập bình luận");
-                return;
 
+                // dừng hàm
+                return;
             }
 
+            // lấy danh sách comment
             let commentList =
                 document.getElementById("commentList");
 
+            // tạo div mới
             let div =
                 document.createElement("div");
 
+            // thêm class comment
             div.classList.add("comment");
 
+            // chèn html vào div
             div.innerHTML = `
 
-                <div class="avatar a2">
-                    B
-                </div>
+        <div class="avatar a2">
+            B
+        </div>
 
-                <div class="comment-body">
+        <div class="comment-body">
 
-                    <h4>Bạn</h4>
+            <h4>Bạn</h4>
 
-                    <p>${text}</p>
+            <p>${text}</p>
 
-                </div>
+        </div>
 
-            `;
+    `;
 
+            // thêm comment mới lên đầu
             commentList.prepend(div);
 
+            // xóa nội dung input
             input.value = "";
 
+            // hiện notification
             showNotification(
                 "Có bình luận mới!"
             );
-
         }
+
 
         // ======================
         // NOTIFICATION
         // ======================
 
+        // hàm hiện thông báo
         function showNotification(text) {
 
+            // tạo div mới
             let notify =
                 document.createElement("div");
 
+            // thêm class notify
             notify.classList.add("notify");
 
+            // thêm nội dung text
             notify.innerText = text;
 
+            // thêm notify vào body
             document.body.appendChild(notify);
 
+            // 3 giây sau xóa notify
             setTimeout(() => {
 
                 notify.remove();
 
             }, 3000);
-
         }
 
+
         // ======================
-        // DELETE
+        // DELETE TASK
         // ======================
 
+        // lấy nút xóa
         let deleteBtn =
             document.querySelector(".delete");
 
+        // lấy toàn bộ task
+        let taskMain =
+            document.getElementById("taskMain");
+
+
+        // click nút xóa
         deleteBtn.addEventListener("click", function () {
 
+            // hiện popup xác nhận
             let check =
-                confirm("Bạn có chắc muốn xóa?");
+                confirm("Bạn có chắc muốn xóa công việc?");
 
+            // nếu bấm OK
             if (check) {
 
-                showNotification(
-                    "Đã xóa công việc"
-                );
+                // xóa task
+                taskMain.remove();
 
+                // hiện thông báo
+                alert("Đã xóa công việc!");
             }
 
         });
 
-        // ======================
-        // EDIT TITLE
-        // ======================
-
-        let title =
-            document.getElementById("taskTitle");
-
-        title.addEventListener("click", function () {
-
-            let newTitle =
-                prompt(
-                    "Nhập tiêu đề mới",
-                    title.innerText
-                );
-
-            if (
-                newTitle !== null &&
-                newTitle.trim() !== ""
-            ) {
-
-                title.innerText = newTitle;
-
-            }
-
-        });
 
         // ======================
         // DARK MODE
         // ======================
 
+        // lấy nút dark mode
         let darkBtn =
             document.getElementById("darkModeBtn");
 
+        // click dark mode
         darkBtn.addEventListener("click", function () {
 
+            // toggle class dark
+            // có thì xóa
+            // chưa có thì thêm
             document.body.classList.toggle("dark");
 
         });
+
 
         // ======================
         // FILE DOWNLOAD
         // ======================
 
+        // lấy tất cả file
         let files =
             document.querySelectorAll(".file");
 
+
+        // lặp từng file
         files.forEach(file => {
 
+            // click file
             file.addEventListener("click", function () {
 
+                // hiện thông báo tải file
                 showNotification(
                     "Đang tải file..."
                 );
@@ -852,37 +979,47 @@
 
         });
 
+
         // ======================
         // STATUS
         // ======================
 
+        // lấy status task
         let status =
             document.getElementById("taskStatus");
 
+
+        // click status
         status.addEventListener("click", function () {
 
+            // nếu đang làm
             if (
                 status.innerText === "Đang làm"
             ) {
 
+                // đổi text
                 status.innerText = "Hoàn thành";
 
+                // đổi màu nền
                 status.style.background =
                     "#dcfce7";
 
+                // đổi màu chữ
                 status.style.color =
                     "#16a34a";
 
             } else {
 
+                // đổi lại trạng thái
                 status.innerText = "Đang làm";
 
+                // đổi màu nền
                 status.style.background =
                     "#dbeafe";
 
+                // đổi màu chữ
                 status.style.color =
                     "#2563eb";
-
             }
 
         });
@@ -891,36 +1028,49 @@
         // DRAG DROP
         // ======================
 
+        // lấy checklist
         const checklist =
             document.getElementById("checklist");
 
+
+        // biến lưu item đang kéo
         let draggedItem = null;
 
+
+        // lấy tất cả li
         document.querySelectorAll("#checklist li")
             .forEach(item => {
 
+                // bắt đầu kéo
                 item.addEventListener(
                     "dragstart",
+
                     function () {
 
+                        // lưu item đang kéo
                         draggedItem = item;
-
                     }
                 );
 
+                // cho phép drop
                 item.addEventListener(
                     "dragover",
+
                     function (e) {
 
+                        // bắt buộc phải có
                         e.preventDefault();
-
                     }
                 );
 
+                // khi thả item
                 item.addEventListener(
                     "drop",
+
                     function () {
 
+                        // chèn item kéo
+                        // lên trước item hiện tại
                         checklist.insertBefore(
                             draggedItem,
                             item
@@ -930,6 +1080,69 @@
                 );
 
             });
+
+
+        // ======================
+        // EDIT TASK
+        // ======================
+
+        // lấy nút edit
+        let editBtn =
+            document.querySelector(".edit");
+
+        // lấy tiêu đề task
+        let taskTitle =
+            document.getElementById("taskTitle");
+
+        // lấy mô tả task
+        let taskDesc =
+            document.querySelector(".desc");
+
+        // click edit
+        editBtn.addEventListener("click", function () {
+
+            // popup sửa tiêu đề
+            let newTitle =
+                prompt(
+
+                    "Nhập tiêu đề mới",
+
+                    // giá trị mặc định
+                    taskTitle.innerText
+                );
+
+            // nếu không rỗng
+            if (
+                newTitle !== null &&
+                newTitle.trim() !== ""
+            ) {
+
+                // đổi tiêu đề
+                taskTitle.innerText =
+                    newTitle;
+            }
+
+            // popup sửa mô tả
+            let newDesc =
+                prompt(
+
+                    "Nhập mô tả mới",
+
+                    taskDesc.innerText
+                );
+
+            // nếu không rỗng
+            if (
+                newDesc !== null &&
+                newDesc.trim() !== ""
+            ) {
+
+                // đổi mô tả
+                taskDesc.innerText =
+                    newDesc;
+            }
+
+        });
 
     </script>
 
